@@ -1,0 +1,26 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+  <h1>Plant Types</h1>
+
+  {% if planttype_list %}
+  <ul>
+    {% for planttype in planttype_list %}
+      <li>
+          {{ planttype.name }}
+          (<a href="{% url 'plant_view:planttype_update' planttype.id %}">Edit</a> |
+          <a href="{% url 'plant_view:planttype_delete' planttype.id %}">Delete</a>) <br/>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% else %}
+    <p>There are no plant types made yet.</p>
+  {% endif %}
+
+  <p>_________________________________________________</p>
+  <ul>
+    <li><a href="{% url 'plant_view:planttype_create' %}">Add a new plant type!</a></li>
+    <li><a href="{% url 'plant_view:all' %}">Go back to plants!</a></li>
+  </ul>
+{% endblock %}

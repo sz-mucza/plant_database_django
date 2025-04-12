@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-radius:10px !important">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home:home' %}">{{ settings.APP_NAME }}</a>
+      <ul class="navbar-nav">
+        {% url 'plant_view:all' as x %}
+        <li {% if request.get_full_path == x %}class="active"{% endif %}>
+            <a class="nav-link" href="{% url 'plant_view:all' %}" role="button">Plants</a></li>
+        </ul>
+
+        <ul class="navbar-nav">
+            <li {% if request.get_full_path == x %}class="active"{% endif %}>
+                <a class="nav-link" href="{% url 'plant_view:planttype_list' %}" role="button">Plant types</a></li>
+        </ul>
+
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+
+        <li class="nav-item dropdown">
+           <a class="nav-link dropdown-toggle" href="#" id="rightnavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% comment %} <img style="width: 25px;" src="{{ user|gravatar:60 }}"/><b class="caret"></b> {% endcomment %}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="rightnavDropdown">
+              <li><a class="dropdown-item" href="{% url 'logout' %}?next={% url 'home:home' %}">Logout</a></li>
+          </ul>
+         </li>
+
+         {% else %}
+         <li class="nav-item"><a class="nav-link" href="{% url 'login' %}?next={% url 'home:home' %}">Login</a></li>
+         {% endif %}
+      </ul>
+    </div>
+  </nav>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        <input type="submit" value="Submit">
+        <input type="submit" onclick="javascript:history.go(-1);" value="Cancel">
+        {% comment %} <a href="{% url 'plant_view:all' %}">Cancel</a> {% endcomment %}
+    </form>
+{% endblock %}
