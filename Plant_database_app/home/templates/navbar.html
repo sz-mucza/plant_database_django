@@ -18,18 +18,28 @@
       <ul class="navbar-nav">
         {% if user.is_authenticated %}
 
-        <li class="nav-item dropdown">
-           <a class="nav-link dropdown-toggle" href="#" id="rightnavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% comment %} <img style="width: 25px;" src="{{ user|gravatar:60 }}"/><b class="caret"></b> {% endcomment %}
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="rightnavDropdown">
-              <li><a class="dropdown-item" href="{% url 'logout' %}?next={% url 'home:home' %}">Logout</a></li>
-          </ul>
-         </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="rightnavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% comment %} <img style="width: 25px;" src="{{ user|gravatar:60 }}"/><b class="caret"></b> {% endcomment %}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="rightnavDropdown">
+                <li><a class="dropdown-item" href="{% url 'logout' %}?next={% url 'home:home' %}">Logout</a></li>
+            </ul>
+          </li>
 
          {% else %}
-         <li class="nav-item"><a class="nav-link" href="{% url 'login' %}?next={% url 'home:home' %}">Login</a></li>
+          {% comment %} USER LOGIN OR SIGNUP {% endcomment %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="rightnavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              User Login
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="rightnavDropdown">
+              <li><a class="dropdown-item" href="{% url 'login' %}?next={% url 'home:home' %}">Log in</a></li>
+              <li><a class="dropdown-item" href="{% url 'home:register' %}">Sign up</a></li>
+            </ul>
+         </li>
          {% endif %}
+         
       </ul>
     </div>
   </nav>
