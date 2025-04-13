@@ -45,27 +45,27 @@ class Plant(models.Model):
         return self.name
     
 
-class PlantEvent(models.Model):
-    '''
-    Stores an event in the plant's timeline.
-    TODO: handle differently events with a duration (like flowering)
-    '''
-    title = models.CharField(max_length=128)
-    description = models.CharField(max_length=1000)
-    plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
+# class PlantEvent(models.Model):
+#     '''
+#     Stores an event in the plant's timeline.
+#     TODO: handle differently events with a duration (like flowering)
+#     '''
+#     title = models.CharField(max_length=128)
+#     description = models.CharField(max_length=1000)
+#     plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"{self.title} (UNDEFINED)"
+#     def __str__(self):
+#         return f"{self.title} (UNDEFINED)"
     
-class DurationPlantEvent(PlantEvent):
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+# class DurationPlantEvent(PlantEvent):
+#     start_date = models.DateTimeField()
+#     end_date = models.DateTimeField()
 
-    def __str__(self):
-            return f"{self.title} ({self.start_date} - {self.end_date})"
+#     def __str__(self):
+#             return f"{self.title} ({self.start_date} - {self.end_date})"
     
-class StaticPlantEvent(PlantEvent):
-    date = models.DateTimeField()
+# class StaticPlantEvent(PlantEvent):
+#     date = models.DateTimeField()
 
-    def __str__(self):
-            return f"{self.title} ({self.date})"
+#     def __str__(self):
+#             return f"{self.title} ({self.date})"
