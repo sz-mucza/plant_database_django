@@ -12,6 +12,7 @@ urlpatterns = [
 
         
         path('ptview', views.PlantTypeListView.as_view(), name='planttype_list'),
+        path('ptview/<int:pk>/', views.PlantTypeDetailView.as_view(), name='planttype_detail'),
         path('ptview/create/', views.PlantTypeCreate.as_view(), name='planttype_create'),
         path('ptview/<int:pk>/update/', views.PlantTypeUpdate.as_view(), name='planttype_update'),
         path('ptview/<int:pk>/delete/', views.PlantTypeDelete.as_view(), name='planttype_delete'),

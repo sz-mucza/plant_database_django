@@ -1,0 +1,16 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+
+<span style="float: right;">
+    {% comment %} {% if ad.owner == user %} {% endcomment %}
+        <a href="{% url 'plant_view:planttype_update' planttype.id %}"><i class="fa fa-pencil"></i></a>
+        <a href="{% url 'plant_view:planttype_delete' planttype.id %}"><i class="fa fa-trash"></i></a>
+    {% comment %} {% endif %} {% endcomment %}
+</span>
+
+<h1>{{ planttype.name }}</h1>
+
+<p>Plant count: {{ plantcount }}</p>
+
+{% endblock %}

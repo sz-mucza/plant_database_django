@@ -7,7 +7,7 @@
   <ul>
     {% for planttype in planttype_list %}
       <li>
-          {{ planttype.name }}
+        <a href="{% url 'plant_view:planttype_detail' planttype.id %}">{{ planttype.name }}</a>
           (<a href="{% url 'plant_view:planttype_update' planttype.id %}">Edit</a> |
           <a href="{% url 'plant_view:planttype_delete' planttype.id %}">Delete</a>) <br/>
       </li>
