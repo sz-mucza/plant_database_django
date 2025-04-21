@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -43,6 +43,17 @@ class PlantTypeListView(LoginRequiredMixin, View):
             'planttype_list': planttype_list,
         }
         return render(request, 'plant_view/planttype_list.html', context)
+    
+class PlantTypeDetailView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        current_plant_type = get_object_or_404(PlantType, id=pk)
+        plant_count = Plant.objects.all().filter(plant_type=current_plant_type).count()
+
+        context = {
+            'planttype': current_plant_type,
+            'plantcount': plant_count,
+        }
+        return render(request, 'plant_view/planttype_detail.html', context)
     
 class PlantTypeCreate(LoginRequiredMixin, CreateView):
     # CreateView basically does the same things as above:
