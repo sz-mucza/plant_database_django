@@ -5,33 +5,84 @@ from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from plant_view.models import Plant, PlantType
+from plant_view.forms import PlantCreateForm
 
 # PLANT RELATED VIEWS
 class MainView(LoginRequiredMixin, View):
     def get(self, request):
         plant_list = Plant.objects.all()
+        plant_type_list = PlantType.objects.all()
+
+        context = {
+            'plant_list': plant_list,
+            'plant_type_list': plant_type_list,
+        }
+        return render(request, 'plant_view/plant_list.html', context)
+    
+class MyPlantsView(LoginRequiredMixin, View):
+    def get(self, request):
+        plant_list = Plant.objects.all().filter(user=self.request.user)
 
         context = {
             'plant_list': plant_list,
         }
-        return render(request, 'plant_view/plant_list.html', context)
+        return render(request, 'plant_view/my_plant_list.html', context)
     
 
-class PlantCreate(LoginRequiredMixin, CreateView):
-    # CreateView basically does the same things as above:
-    model = Plant
-    fields = "__all__"
+class PlantCreate(LoginRequiredMixin, View):
     success_url = reverse_lazy("plant_view:all")
+    template_name = 'plant_view/plant_form.html'
+
+    def get(self, request, pk=None):
+            form = PlantCreateForm()
+            ctx = {'form': form}
+            return render(request, self.template_name, ctx)
+    
+    def post(self, request, pk=None):
+        form = PlantCreateForm(request.POST, request.FILES or None)
+
+        if not form.is_valid():
+            ctx = {'form': form}
+            return render(request, self.template_name, ctx)
+
+        # Add owner to the model before saving
+        plant = form.save(commit=False)
+        plant.user = self.request.user
+        plant.save()
+        return redirect(self.success_url)
 
 class PlantUpdate(LoginRequiredMixin, UpdateView):
-    model = Plant
-    fields = "__all__"
     success_url = reverse_lazy("plant_view:all")
+    template_name = 'plant_view/plant_form.html'
+
+    def get(self, request, pk=None):
+        plant = get_object_or_404(Plant, id=pk, user=self.request.user)
+        form = PlantCreateForm(instance=plant)
+        ctx = {'form': form}
+        return render(request, self.template_name, ctx)
+    
+    def post(self, request, pk=None):
+        plant = get_object_or_404(Plant, id=pk, user=self.request.user)
+        form = PlantCreateForm(request.POST, request.FILES or None, instance=plant)
+
+        if not form.is_valid():
+            ctx = {'form': form}
+            return render(request, self.template_name, ctx)
+
+        # Add owner to the model before saving
+        plant = form.save(commit=False)
+        plant.save()
+        return redirect(self.success_url)
+
 
 class PlantDelete(LoginRequiredMixin, DeleteView):
     model = Plant
     fields = "__all__"
     success_url = reverse_lazy("plant_view:all")
+
+    def get_queryset(self):
+        qs = super(DeleteView, self).get_queryset()
+        return qs.filter(user=self.request.user)
 
 
 # PLANT TYPE RELATED VIEWS

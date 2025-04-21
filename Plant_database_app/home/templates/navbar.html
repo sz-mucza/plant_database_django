@@ -4,17 +4,28 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-radius:10px !important">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home:home' %}">{{ settings.APP_NAME }}</a>
+
+      {% comment %} ALL PLANTS LINK {% endcomment %}
       <ul class="navbar-nav">
         {% url 'plant_view:all' as x %}
         <li {% if request.get_full_path == x %}class="active"{% endif %}>
             <a class="nav-link" href="{% url 'plant_view:all' %}" role="button">Plants</a></li>
-        </ul>
+      </ul>
 
-        <ul class="navbar-nav">
-            <li {% if request.get_full_path == x %}class="active"{% endif %}>
-                <a class="nav-link" href="{% url 'plant_view:planttype_list' %}" role="button">Plant types</a></li>
+      {% comment %} PLANT TYPE LIST LINK {% endcomment %}
+      <ul class="navbar-nav">
+          <li {% if request.get_full_path == x %}class="active"{% endif %}>
+              <a class="nav-link" href="{% url 'plant_view:planttype_list' %}" role="button">Plant types</a></li>
+      </ul>
+      
+      {% comment %} MY PLANTS LINK {% endcomment %}
+      <ul class="navbar-nav">
+        <li {% if request.get_full_path == x %}class="active"{% endif %}>
+          <a class="nav-link" href="{% url 'plant_view:plant_myplants' %}" role="button">My plants</a></li>
         </ul>
+      </ul>
 
+      {% comment %} USER LOGIN {% endcomment %}
       <ul class="navbar-nav">
         {% if user.is_authenticated %}
 

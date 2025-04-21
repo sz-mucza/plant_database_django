@@ -6,6 +6,7 @@ from . import views
 app_name = "plant_view" # applicaition namespace
 urlpatterns = [
         path('', views.MainView.as_view(), name='all'),
+        path('main/myplants/', views.MyPlantsView.as_view(), name='plant_myplants'),
         path('main/create/', views.PlantCreate.as_view(), name='plant_create'),
         path('main/<int:pk>/update/', views.PlantUpdate.as_view(), name='plant_update'),
         path('main/<int:pk>/delete/', views.PlantDelete.as_view(), name='plant_delete'),
