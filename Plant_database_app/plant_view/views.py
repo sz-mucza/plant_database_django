@@ -47,10 +47,7 @@ class PlantTypeListView(LoginRequiredMixin, View):
 class PlantTypeDetailView(LoginRequiredMixin, View):
     def get(self, request, pk):
         current_plant_type = get_object_or_404(PlantType, id=pk)
-        # TODO: DOES THIS WORK???
-        print("Now trying to get plant count")
         plant_count = Plant.objects.all().filter(plant_type=current_plant_type).count()
-        print(f"PlantCount: {plant_count}")
 
         context = {
             'planttype': current_plant_type,
