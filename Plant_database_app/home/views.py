@@ -33,6 +33,6 @@ class SignUpView(View):
             user.username = user.username.lower()
             user.save()
             login(request, user)
-            return redirect()
+            return redirect('')
         else:
             return render(request, 'home/register.html', {'form': form})

@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.core.validators import MinLengthValidator
 
 
@@ -29,6 +30,7 @@ class Location(models.Model):
             MinLengthValidator(4, "Name should contain more, than 4 characters."),
         ]
         )
+    
 
     def __str__(self):
         return self.name
@@ -38,6 +40,7 @@ class Plant(models.Model):
     Stores an instance of a plant in the plant database
     '''
     name = models.CharField(max_length=64)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     plant_type = models.ForeignKey(PlantType, on_delete=models.CASCADE)
     # location = models.ForeignKey(Location, on_delete=models.CASCADE)
     

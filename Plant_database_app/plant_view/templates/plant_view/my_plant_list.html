@@ -1,27 +1,22 @@
 {% extends "navbar.html" %}
 
-
 {% block content %}
   <h1>Plant List</h1>
   <p>
     <a href="{% url 'plant_view:plant_create' %}">Add a new plant!</a>
   </p>
 
-  {% if plant_list and plant_type_list %}
+  {% if plant_list %}
   <p>Plant list:</p>
-  
-  {% for plant_type in plant_type_list %}
-    <p>{{ plant_type.name }}:</p>
-    <ul>
+  <ul>
     {% for plant in plant_list %}
-      {% if plant.plant_type == plant_type %}
-        <li>
-            {{ plant.name}} - ({{ plant.plant_type }})
-        </li>
-      {% endif %}
+      <li>
+          {{ plant.name}} - ({{ plant.plant_type }})
+          (<a href="{% url 'plant_view:plant_update' plant.id %}">Update</a> |
+          <a href="{% url 'plant_view:plant_delete' plant.id %}">Delete</a>)
+      </li>
     {% endfor %}
-    </ul>
-  {% endfor %}
+  </ul>
 
   {% else %}
     <p>There are no plants made yet.</p>
