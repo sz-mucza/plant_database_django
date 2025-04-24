@@ -1,11 +1,17 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from plant_view.models import Plant, PlantType
-from plant_view.forms import PlantCreateForm
+from plant_view.models import Plant, PlantType, DurationPlantEvent
+from plant_view.forms import PlantCreateForm, DurationPlantEventCreateForm
+
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 # PLANT RELATED VIEWS
 class MainView(LoginRequiredMixin, View):
@@ -28,27 +34,44 @@ class MyPlantsView(LoginRequiredMixin, View):
         }
         return render(request, 'plant_view/my_plant_list.html', context)
     
+class PlantDetailView(LoginRequiredMixin, DeleteView):
+    def get(self, request, pk):
+        current_plant = get_object_or_404(Plant, id=pk)
+        plant_timeline = DurationPlantEvent.objects.filter(plant=current_plant)
+        event_form = DurationPlantEventCreateForm()
+        context = {
+            'plant': current_plant,
+            'plant_timeline': plant_timeline,
+            'event_form': event_form,
+        }
+        return render(request, 'plant_view/plant_detail.html', context)
+    
 
-class PlantCreate(LoginRequiredMixin, View):
+class PlantCreateView(LoginRequiredMixin, View):
     success_url = reverse_lazy("plant_view:all")
     template_name = 'plant_view/plant_form.html'
 
     def get(self, request, pk=None):
-            form = PlantCreateForm()
-            ctx = {'form': form}
-            return render(request, self.template_name, ctx)
+        logging.info("Plant create form GET called")
+        log.info("")
+        form = PlantCreateForm()
+        ctx = {'form': form}
+        return render(request, self.template_name, ctx)
     
     def post(self, request, pk=None):
+        logging.info("Plant create form POST called")
         form = PlantCreateForm(request.POST, request.FILES or None)
 
         if not form.is_valid():
             ctx = {'form': form}
+            logging.info("Plant create form is not valid, return.")
             return render(request, self.template_name, ctx)
 
         # Add owner to the model before saving
         plant = form.save(commit=False)
         plant.user = self.request.user
         plant.save()
+        logging.info("Plant create form POST done, to be redirected...")
         return redirect(self.success_url)
 
 class PlantUpdate(LoginRequiredMixin, UpdateView):
@@ -121,3 +144,24 @@ class PlantTypeDelete(LoginRequiredMixin, DeleteView):
     model = PlantType
     fields = "__all__"
     success_url = reverse_lazy("plant_view:planttype_list")
+
+
+# PLANT EVENT, TIMELINE RELATED VIEWS:
+class PlantEventCreateView(LoginRequiredMixin, View):
+    
+    def post(self, request, pk):
+        p = get_object_or_404(Plant, id=pk)
+
+        print("DEBUG:", pk, p)
+        print(request.POST)
+        plant_event = DurationPlantEvent(
+            title=request.POST['title'],
+            description=request.POST['description'],
+            plant=p,
+            author=request.user,
+            start_date=request.POST['start_date'],
+            end_date=request.POST['end_date'],
+            event_type=request.POST['end_date'],
+            )
+        plant_event.save()
+        return redirect(reverse('plant_view:plant_detail', args=[pk]))

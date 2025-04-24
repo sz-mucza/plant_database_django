@@ -1,0 +1,18 @@
+li.plantevent{
+    border: 2px solid #171f16;
+    background-color: #70956a;
+    margin: 0 0 10px;
+    padding: 5px;
+  }
+  
+  div.title{
+      font-size: 16px;
+      color: #171f16;
+      font-weight: 700;
+  }
+  .topright{
+      position: relative;
+      top: 0;
+      right: 0;
+      float: right;
+  }

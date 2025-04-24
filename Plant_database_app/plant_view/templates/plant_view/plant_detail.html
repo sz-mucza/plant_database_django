@@ -1,0 +1,60 @@
+{% extends "navbar.html" %}
+
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block head %}
+<link type="text/css" rel="stylesheet" href="{% static "plant_view/style.css" %}">
+
+{% endblock %}
+
+{% block content %}
+
+<span style="float: right;">
+    {% if plant.user == user %}
+        <a href="{% url 'plant_view:plant_update' plant.id %}"><i class="fa fa-pencil"></i></a>
+        <a href="{% url 'plant_view:plant_delete' plant.id %}"><i class="fa fa-trash"></i></a>
+    {% endif %}
+</span>
+
+<h1>{{ plant.name }}</h1>
+
+<p>Creator: {{ plant.user }}</p>
+
+<p>Plant type: <a href="{% url 'plant_view:planttype_detail' plant.plant_type.id %}">{{ plant.plant_type }}</a></p>
+
+
+
+
+{% if plant_timeline %}
+    <p>Plant events:</p>
+    <ul style="list-style-type:none;">
+        {% for event in plant_timeline %}
+        <li class="plantevent">
+            <div>
+                <div class="topright">[{{event.start_date|date:"SHORT_DATE_FORMAT"}} - {{event.end_date|date:"SHORT_DATE_FORMAT"}}]</div>
+                <div class="title">{{event.title}}</div>
+
+            </div>
+            <p> {{event.description}}</p>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No plant events added yet.</p>
+{% endif %}
+
+<p>Add a new plant event:</p>
+{% if user.is_authenticated %}
+    <br clear="all"/>
+    <form method="post" action="{% url 'plant_view:plantevent_create' plant.id %}">
+        {% csrf_token %}
+        {% bootstrap_form event_form %}
+        <input type="submit" value="Submit"/>
+    </form>
+{% endif %}
+
+<p><a href="{% url 'plant_view:all' %}">To All Plants</a></p>
+<p><a href="{% url 'plant_view:plant_myplants' %}">To My Plants</a></p>
+
+{% endblock %}
