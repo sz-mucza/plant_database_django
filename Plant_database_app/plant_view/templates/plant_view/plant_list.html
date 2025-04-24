@@ -16,7 +16,7 @@
     {% for plant in plant_list %}
       {% if plant.plant_type == plant_type %}
         <li>
-            {{ plant.name}} - ({{ plant.plant_type }})
+          <a href="{% url 'plant_view:plant_detail' plant.id %}">{{ plant.name}}</a>  - (<a href="{% url 'plant_view:planttype_detail' plant.plant_type.id %}">{{ plant.plant_type }}</a>)
         </li>
       {% endif %}
     {% endfor %}
