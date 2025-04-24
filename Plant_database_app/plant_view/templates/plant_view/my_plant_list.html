@@ -7,11 +7,11 @@
   </p>
 
   {% if plant_list %}
-  <p>Plant list:</p>
+  <p>My plant list:</p>
   <ul>
     {% for plant in plant_list %}
       <li>
-          {{ plant.name}} - ({{ plant.plant_type }})
+          <a href="{% url 'plant_view:plant_detail' plant.id %}">{{ plant.name}}</a>  - (<a href="{% url 'plant_view:planttype_detail' plant.plant_type.id %}">{{ plant.plant_type }}</a>)
           (<a href="{% url 'plant_view:plant_update' plant.id %}">Update</a> |
           <a href="{% url 'plant_view:plant_delete' plant.id %}">Delete</a>)
       </li>
